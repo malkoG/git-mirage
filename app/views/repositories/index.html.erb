@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Repositories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Repository name</th>
+      <th>Temporary path</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @repositories.each do |repository| %>
+      <tr>
+        <td><%= repository.username %></td>
+        <td><%= repository.repository_name %></td>
+        <td><%= repository.temporary_path %></td>
+        <td><%= link_to 'Show', repository_path(temporary_path: repository.temporary_path) %></td>
+        <td><%= link_to 'Edit', edit_repository_path(temporary_path: repository.temporary_path) %></td>
+        <td><%= link_to 'Destroy', repository_path(temporary_path: repository.temporary_path), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Repository', new_repository_path %>

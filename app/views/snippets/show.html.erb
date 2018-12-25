@@ -1,0 +1,4 @@
+
+<% File.readlines("#{@current_path}.#{params[:format]}").each do |f| %>
+    <%= f %> <br>
+<% end %>

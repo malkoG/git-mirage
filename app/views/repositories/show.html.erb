@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Username:</strong>
+  <%= @repository.username %>
+</p>
+
+<p>
+  <strong>Repository name:</strong>
+  <%= @repository.repository_name %>
+</p>
+
+<p>
+  <strong>Temporary Path:</strong>
+  <%= @repository.temporary_path %>
+</p>
+
+<% Dir.chdir(@current_path) do %>
+  <% relative_path = Dir.pwd.split("/")[4..-1].join("/") %>
+  <% Dir.entries(".").each do |entry| %>
+    <% current_entry = @current_path + "/#{entry}" %>
+    <div>
+      <span>
+        <% if File.directory? current_entry %>
+          <%= link_to "#{entry}/", repository_path(temporary_path: @repository.temporary_path, 
+                                                  current_path: "#{relative_path}/#{entry}") %>
+        <% else %>
+          <%= link_to entry, snippet_path(temporary_path: @repository.temporary_path, 
+                                          current_path: "#{relative_path}/#{entry}") %>
+        <% end %>
+      </span>
+    </div>
+  <% end %>
+<% end %>
+
+<br>
+<%= link_to 'Back', repositories_path %>
+
