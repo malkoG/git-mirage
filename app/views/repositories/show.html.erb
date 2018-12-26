@@ -16,21 +16,40 @@
 </p>
 
 <% Dir.chdir(@current_path) do %>
-  <% relative_path = Dir.pwd.split("/")[4..-1].join("/") %>
-  <% Dir.entries(".").each do |entry| %>
-    <% current_entry = @current_path + "/#{entry}" %>
-    <div>
-      <span>
-        <% if File.directory? current_entry %>
-          <%= link_to "#{entry}/", repository_path(temporary_path: @repository.temporary_path, 
-                                                  current_path: "#{relative_path}/#{entry}") %>
-        <% else %>
-          <%= link_to entry, snippet_path(temporary_path: @repository.temporary_path, 
-                                          current_path: "#{relative_path}/#{entry}") %>
-        <% end %>
-      </span>
-    </div>
-  <% end %>
+  <table>
+    <th>
+      <tr>
+        <td>is directory?</td>
+        <td>Filename</td>
+        <td>created_at</td>
+        <td>updated_at</td>
+      </tr>
+    </th>
+    <% relative_path = Dir.pwd.split("/")[4..-1].join("/") %>
+    <% Dir.entries(".").each do |entry| %>
+      <% current_entry = @current_path + "/#{entry}" %>
+      <tr>
+        <td>
+          <%= File.stat(current_entry).directory? ? "d" : "-" %>
+        </td>
+        <td>
+          <% if File.directory? current_entry %>
+            <%= link_to "#{entry}/", repository_path(temporary_path: @repository.temporary_path, 
+                                                    current_path: "#{relative_path}/#{entry}") %>
+          <% else %>
+            <%= link_to entry, snippet_path(temporary_path: @repository.temporary_path, 
+                                            current_path: "#{relative_path}/#{entry}") %>
+          <% end %>
+        </td>
+        <td>
+          <%= File.stat(current_entry).birthtime %>
+        </td>
+        <td>
+          <%= File.stat(current_entry).ctime %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
 
 <br>

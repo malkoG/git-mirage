@@ -1,5 +1,7 @@
 {
   "name": "git-mirage",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "codemirror": "^5.19.0"
+  }
 }
