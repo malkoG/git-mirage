@@ -13,6 +13,8 @@
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= require jquery
+
 
 //= require codemirror/lib/codemirror
 //= require codemirror/addon/comment/comment
@@ -40,5 +42,8 @@
 //= require codemirror/mode/swift/swift
 //= require codemirror/mode/sql/sql
 //= require codemirror/mode/vue/vue
+
+//= require firebase/firebase
+//= require firepad/dist/firepad
 
 //= require_tree .

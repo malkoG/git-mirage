@@ -1,15 +1,10 @@
 <h2><%= @current_path %></h2>
 
 <form>
-    <textarea id="code-snippet"><%= File.read(@current_path) %></textarea>
-    <script>
-        var editor = CodeMirror.fromTextArea(document.getElementById("code-snippet"), {
-            lineNumbers: true,
-            matchBrackets: true,
-            mode: '<%= translate_extention_to_mime_type(@extension) %>',
-            indentUnit: 4,
-            indentWithTabs: true
-        });
-    </script>
+    <hidden id="code-snippet-saved" hidden><%= File.read(@current_path) %></hidden>
+    <textarea 
+        id="code-snippet"
+        data-language="<%= translate_extention_to_mime_type(@extension) %>"
+    ></textarea>
     
 </form>

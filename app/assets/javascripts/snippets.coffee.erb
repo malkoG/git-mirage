@@ -1,0 +1,43 @@
+# Place all the behaviors and hooks related to the matching controller here.
+# All this logic will automatically be available in application.js.
+# You can use CoffeeScript in this file: http://coffeescript.org/
+
+SnippetViewer =
+    show: ->
+        @language = document.getElementById('code-snippet').dataset.language
+
+        @text = document.getElementById('code-snippet-saved').value
+
+        firebaseOptions = 
+            apiKey: "<%= Settings.firebase.api_key %>",
+            authDomain: "<%= Settings.firebase.auth_domain %>",
+            databaseURL: "<%= Settings.firebase.database_url %>",
+            projectId: "<%= Settings.firebase.project_id %>"
+
+        firebase.initializeApp(firebaseOptions)
+
+        firepadRef = firebase.database().ref()
+
+        codeMirrorOptions =
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: @language,
+            indentUnit: 4,
+            indentWithTabs: true
+
+        console.log(@text)
+
+        @editor = CodeMirror.fromTextArea(document.getElementById('code-snippet'), codeMirrorOptions)
+
+        firepadOptions =
+            richTextShortcuts: true,
+            richTextToolbar: true,
+            defaultText: @text
+
+        firepad = Firepad.fromCodeMirror(firepadRef, @editor, firepadOptions)
+
+
+
+@controller = $('main').data('controller')
+if @controller is "snippets"
+    SnippetViewer.show()

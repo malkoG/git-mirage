@@ -11,6 +11,7 @@
  * It is generally better to create a new file per style scope.
  *
  *= require codemirror/lib/codemirror
+ *= require firepad/dist/firepad
  *= require_tree .
  *= require_self
  */

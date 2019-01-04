@@ -2,6 +2,8 @@
   "name": "git-mirage",
   "private": true,
   "dependencies": {
-    "codemirror": "^5.19.0"
+    "codemirror": "^5.19.0",
+    "firepad": "^1.5.1",
+    "jquery": "^3.3.1"
   }
 }
