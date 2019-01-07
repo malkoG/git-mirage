@@ -4,9 +4,13 @@
 
 SnippetViewer =
     show: ->
-        @language = document.getElementById('code-snippet').dataset.language
+        targetElement = document.getElementById('code-snippet')
 
-        @text = document.getElementById('code-snippet-saved').value
+        @path = targetElement.dataset.path
+        @language = targetElement.dataset.language
+        @text = document.getElementById('code-snippet-saved').innerText
+
+        @modified_path = @path.replace /\./, ","
 
         firebaseOptions = 
             apiKey: "<%= Settings.firebase.api_key %>",
@@ -16,9 +20,11 @@ SnippetViewer =
 
         firebase.initializeApp(firebaseOptions)
 
-        firepadRef = firebase.database().ref()
+        firepadRef = @getExampleRef(@modified_path)
+        console.log(firepadRef.toString())
 
         codeMirrorOptions =
+            lineWrapping: true,
             lineNumbers: true,
             matchBrackets: true,
             mode: @language,
@@ -27,16 +33,41 @@ SnippetViewer =
 
         console.log(@text)
 
-        @editor = CodeMirror.fromTextArea(document.getElementById('code-snippet'), codeMirrorOptions)
+        @editor = CodeMirror(document.getElementById('code-snippet'), codeMirrorOptions)
 
-        firepadOptions =
-            richTextShortcuts: true,
-            richTextToolbar: true,
+        firepadOption =
             defaultText: @text
 
-        firepad = Firepad.fromCodeMirror(firepadRef, @editor, firepadOptions)
+        firepad = Firepad.fromCodeMirror(firepadRef, @editor, firepadOption)
 
+        console.log(firepad)
 
+        firepad.on('ready', () -> 
+            unless ( firepad.isHistoryEmpty() )
+                @text = firepad.getText()
+                firepad.setText(@text)
+        )
+
+        <%# firepad.on('synced', (isSynced) -> 
+            unless isSynced
+                $.ajax('')
+        )
+%>
+
+    getExampleRef: (path) ->
+        ref  = firebase.database().ref(path)
+        hash = window.location.hash.replace(/#/g, '')
+        console.log(hash)
+        if hash
+            ref = ref.child(hash)
+        else 
+            ref = ref.push()
+            window.location = window.location + '#' + ref.key
+        
+        if typeof console != 'undefined'
+            console.log('Firebase data:', ref.toString())
+
+        return ref
 
 @controller = $('main').data('controller')
 if @controller is "snippets"
