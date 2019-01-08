@@ -2,11 +2,12 @@
 
 <form>
     <hidden id="code-snippet-saved" hidden><%= File.read(@current_path) %></hidden>
-    <div
+    <textarea
         id="code-snippet"
         class="firepad-container"
         data-language="<%= translate_extention_to_mime_type(@extension) %>"
         data-path="<%= @current_path %>"
-    ></div>
+        data-user-id="<%= current_account.email %>"
+    ></textarea>
     
 </form>

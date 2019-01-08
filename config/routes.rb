@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   get 'snippets/repositories/:temporary_path/file/', to: "snippets#show", as: "snippet"
-  get 'snippets/edit'
+  post 'snippets/', to: "snippets#create"
   get "repositories/", to: "repositories#index"
   get "repositories/new", to: "repositories#new", as: "new_repository"
   get "repositories/:temporary_path(/*current_path)", to: "repositories#show", as: "repository"

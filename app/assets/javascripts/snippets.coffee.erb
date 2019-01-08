@@ -6,7 +6,7 @@ SnippetViewer =
     show: ->
         targetElement = document.getElementById('code-snippet')
 
-        @path = targetElement.dataset.path
+        @path     = targetElement.dataset.path
         @language = targetElement.dataset.language
         @text = document.getElementById('code-snippet-saved').innerText
 
@@ -33,26 +33,27 @@ SnippetViewer =
 
         console.log(@text)
 
-        @editor = CodeMirror(document.getElementById('code-snippet'), codeMirrorOptions)
+        CodeMirror.commands.save = 
+            (cm) => $.post('/snippets', {
+                source_code: @firepad.getText(),
+                file_path: @path
+            })
+
+        @editor = CodeMirror.fromTextArea(document.getElementById('code-snippet'), codeMirrorOptions)
 
         firepadOption =
             defaultText: @text
 
-        firepad = Firepad.fromCodeMirror(firepadRef, @editor, firepadOption)
+        @firepad = Firepad.fromCodeMirror(firepadRef, @editor, firepadOption)
 
         console.log(firepad)
 
-        firepad.on('ready', () -> 
-            unless ( firepad.isHistoryEmpty() )
-                @text = firepad.getText()
-                firepad.setText(@text)
+        @firepad.on('ready', () -> 
+            unless ( @firepad.isHistoryEmpty() )
+                @text = @firepad.getText()
+                @firepad.setText(@text)
         )
 
-        <%# firepad.on('synced', (isSynced) -> 
-            unless isSynced
-                $.ajax('')
-        )
-%>
 
     getExampleRef: (path) ->
         ref  = firebase.database().ref(path)
